@@ -11,17 +11,20 @@
             <ColumnDefinition Width="297*"/>
             <ColumnDefinition Width="103*"/>
         </Grid.ColumnDefinitions>
-        <ListBox Name="FolderMenuList" Margin="10,0,200,0" Grid.ColumnSpan="2" SelectionChanged="ListBox_SelectionChanged" SelectionMode="Single" d:ItemsSource="{d:SampleData ItemCount=5}" MouseDoubleClick="DoubleClickFolderItem">
+        <ListBox Name="FolderMenuList" Margin="10,60,200,0" Grid.ColumnSpan="2" SelectionChanged="ListBox_SelectionChanged" SelectionMode="Single" d:ItemsSource="{d:SampleData ItemCount=5}" MouseDoubleClick="DoubleClickFolderItem">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <WrapPanel Width="571">
-                        <Image Source="C:\Users\Chris\Pictures\8d7d52621ddef15795b1ae815a8bc5a3.jpg" Height="50"/>
+                        <Image x:Name="ItemImage" Source="{Binding ItemImage}" Height="50"/>
                         <Separator Width="10" Background="{x:Null}"/>
-                        <TextBlock Text="hi" TextAlignment="Left" FontSize="20" Width="511" VerticalAlignment="Center"/>
-                        <TextBlock x:Name="Type" Text="F" Width="0" Height="0"/>
+                        <TextBlock x:Name="ItemName" Text="{Binding ItemName}" TextAlignment="Left" FontSize="20" Width="511" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="Type" Text="{Binding Type}" Width="0" Height="0"/>
+                        <TextBlock x:Name="Hidden" Text="{Binding Hidden}" Width="0" Height="0"/>
+                        <TextBlock x:Name="Index" Text="{Binding Index}" Width="0" Height="0"/>
                     </WrapPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <TextBlock Name="TESTTEXTBLOCK" Grid.Column="1" HorizontalAlignment="Left" Margin="35,75,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Height="47" Width="132"/>
     </Grid>
 </Window>
