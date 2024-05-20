@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -7,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -24,9 +26,20 @@ namespace Youtube_Storage_2
     public partial class MainWindow : Window
     {
         Folder currentFolder;
+        Settings settings = new Settings();
+
+        public Folder GetCurrentFolder()
+        {
+            return currentFolder;
+        }
+
+        public void setCurrentFolder(Folder value)
+        {
+            currentFolder = value;
+        }
 
         //Transfers a folder or link from an object to the format needed by the on screen list
-        struct Transfer
+        public struct Transfer
         {
             public string ItemName { get; set; }
             public string ItemImage { get; set; }
@@ -40,12 +53,18 @@ namespace Youtube_Storage_2
             InitializeComponent();
             LoadData();
 
-            //TESTING
+            /*TESTING
             currentFolder.AddFolder("JAKE");
+            currentFolder.AddFolder("JAKE");
+            currentFolder.AddFolder("JAKE");
+            currentFolder.AddFolder("JAKE");
+            currentFolder.AddFolder("JAKE");
+            currentFolder.AddFolder("JAKE");
+            currentFolder.AddFolder("JAKE");
+            currentFolder.AddLink("JIM", "https://en.wikipedia.org/wiki/Hamburger_University", "");
+            TESTING*/
 
             RefreshFolderList();
-            TESTTEXTBLOCK.Text = ((Transfer)FolderMenuList.Items[0]).Type;
-            //TESTING
         }
 
         void LoadData()
@@ -76,6 +95,17 @@ namespace Youtube_Storage_2
             Link link;
 
             FolderMenuList.Items.Clear();
+
+            if(currentFolder.Parent != null) 
+            {
+                transfer.ItemName = "(Back)";
+                transfer.ItemImage = "C:\\Users\\Chris\\Pictures\\8d7d52621ddef15795b1ae815a8bc5a3.jpg";
+                transfer.Type = "P";
+                transfer.Hidden = "F";
+                transfer.Index = "0";
+
+                FolderMenuList.Items.Add(transfer);
+            }
 
             for (int i = 0; i < currentFolder.GetFolders().Count; i++)
             {
@@ -116,7 +146,25 @@ namespace Youtube_Storage_2
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            Transfer selected = new Transfer();
 
+            if (FolderMenuList.SelectedItem != null)
+            {
+                selected = (Transfer)FolderMenuList.SelectedItem;
+            }
+            else
+            {
+                return;
+            }
+
+            if (selected.Type == "L")
+            {
+                NoteTextBox.Text = currentFolder.GetLinks()[int.Parse(selected.Index)].Note;
+            }
+            else
+            {
+                NoteTextBox.Text = "";
+            }
         }
 
         private void ComboBoxItem_Selected(object sender, RoutedEventArgs e)
@@ -126,7 +174,111 @@ namespace Youtube_Storage_2
 
         private void DoubleClickFolderItem(object sender, MouseButtonEventArgs e)
         {
-            //TODO NEXT TIME REMEMBEEEER
+            if(e.RightButton == MouseButtonState.Pressed)
+            {
+                return;
+            }
+
+            Transfer selected = (Transfer)FolderMenuList.SelectedItem;
+
+            //If the parent directory is double clicked return to it
+            if (selected.Type == "P")
+            {
+                currentFolder = currentFolder.Parent;
+                RefreshFolderList();
+            }
+
+            //If a folder is clicked go into it
+            else if (selected.Type == "F")
+            {
+                currentFolder = currentFolder.GetFolders()[int.Parse(selected.Index)];
+                RefreshFolderList();
+            }
+
+            //If a link is clicked open it in the selected browser
+            else if (selected.Type == "L")
+            {
+                Process.Start(settings.BrowserPath, currentFolder.GetLinks()[int.Parse(selected.Index)].LinkStr);
+            }
+        }
+
+        private void FolderListContextMenuOpen(object sender, ContextMenuEventArgs e)
+        {
+            Transfer selected = new Transfer();
+
+            //Disables edit button
+            ((MenuItem)FolderMenuList.ContextMenu.Items[2]).IsEnabled = false;
+
+            //Disables and hides the set link button
+            ((MenuItem)FolderMenuList.ContextMenu.Items[3]).IsEnabled = false;
+            ((MenuItem)FolderMenuList.ContextMenu.Items[3]).Visibility = Visibility.Collapsed;
+
+            if (FolderMenuList.SelectedItem != null)
+            {
+                selected = (Transfer)FolderMenuList.SelectedItem;
+            }
+            else
+            {
+                return;
+            }
+
+            if(selected.Type == "F")
+            {
+                ((MenuItem)FolderMenuList.ContextMenu.Items[2]).IsEnabled = true; //Enable edit button
+            }
+
+            else if (selected.Type == "L")
+            {
+                ((MenuItem)FolderMenuList.ContextMenu.Items[2]).IsEnabled = true; //Enable edit button
+
+                //Enables the set link button
+                ((MenuItem)FolderMenuList.ContextMenu.Items[3]).IsEnabled = true;
+                ((MenuItem)FolderMenuList.ContextMenu.Items[3]).Visibility = Visibility.Visible;
+            }
+        }
+
+        private void MenuItem_Click_NewFolder(object sender, RoutedEventArgs e)
+        {
+            CreateFolderWindow createFolderWindow = new CreateFolderWindow(false);
+
+            createFolderWindow.ShowDialog();
+
+            RefreshFolderList();
+        }
+
+        private void MenuItem_Click_NewLink(object sender, RoutedEventArgs e)
+        {
+            CreateLinkWindow createLinkWindow = new CreateLinkWindow(false);
+
+            createLinkWindow.ShowDialog();
+
+            RefreshFolderList();
+        }
+
+        private void MenuItem_Click_Edit(object sender, RoutedEventArgs e)
+        {
+            Transfer selected = (Transfer)FolderMenuList.SelectedItem;
+            if (selected.Type == "F")
+            {
+                CreateFolderWindow createFolderWindow = new CreateFolderWindow(true);
+
+                createFolderWindow.ShowDialog();
+            }
+            else if(selected.Type == "L")
+            {
+                CreateLinkWindow createLinkWindow = new CreateLinkWindow(true);
+
+                createLinkWindow.ShowDialog();
+            }
+
+                RefreshFolderList();
+        }
+
+        private void MenuItem_Click_SetLink(object sender, RoutedEventArgs e)
+        {
+            Transfer selected = (Transfer)FolderMenuList.SelectedItem;
+
+            currentFolder.GetLinks()[int.Parse(selected.Index)].SetLinkStr(StaticFunctions.GetActiveTabUrl());
         }
     }
 }

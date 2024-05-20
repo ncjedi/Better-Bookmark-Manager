@@ -11,7 +11,15 @@
             <ColumnDefinition Width="297*"/>
             <ColumnDefinition Width="103*"/>
         </Grid.ColumnDefinitions>
-        <ListBox Name="FolderMenuList" Margin="10,60,200,0" Grid.ColumnSpan="2" SelectionChanged="ListBox_SelectionChanged" SelectionMode="Single" d:ItemsSource="{d:SampleData ItemCount=5}" MouseDoubleClick="DoubleClickFolderItem">
+        <ListBox Name="FolderMenuList" Margin="10,60,200,0" Grid.ColumnSpan="2" SelectionChanged="ListBox_SelectionChanged" SelectionMode="Single" d:ItemsSource="{d:SampleData ItemCount=5}" MouseDoubleClick="DoubleClickFolderItem" ContextMenuOpening="FolderListContextMenuOpen">
+            <ListBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem x:Name="AddNewFolder" Header="Add New Folder" Click="MenuItem_Click_NewFolder"/>
+                    <MenuItem x:Name="AddNewLink" Header="Add New Link" Click="MenuItem_Click_NewLink"/>
+                    <MenuItem x:Name="Edit" Header="Edit Item" Click="MenuItem_Click_Edit"/>
+                    <MenuItem x:Name="SetLinkToTab" Header="Set Link To Current Tab(Chrome)" Click="MenuItem_Click_SetLink"/>
+                </ContextMenu>
+            </ListBox.ContextMenu>
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <WrapPanel Width="571">
@@ -25,6 +33,6 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <TextBlock Name="TESTTEXTBLOCK" Grid.Column="1" HorizontalAlignment="Left" Margin="35,75,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Height="47" Width="132"/>
+        <TextBox Name="NoteTextBox" Grid.Column="1" HorizontalAlignment="Right" Margin="0,0,10,10" TextWrapping="Wrap" Width="156" Height="177" VerticalAlignment="Bottom" FontSize="20" IsReadOnly="True"/>
     </Grid>
 </Window>
