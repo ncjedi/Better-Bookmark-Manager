@@ -4,8 +4,6 @@ Items are listed in order of priority with the first being the highest priority.
 
 View all links button
 
-Delete item option
-
 Saving
 
 View deleted items button and restore deleted item option
@@ -22,6 +20,10 @@ Ability to add time to youtube links
 
 Tidy up windows
 
+Ability to import links from original youtube storage (if it's not too hard)
+
 ----Implimented----
 
 Search
+
+Delete item option

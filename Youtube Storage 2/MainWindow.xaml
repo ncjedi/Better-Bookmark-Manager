@@ -17,6 +17,7 @@
                     <MenuItem x:Name="AddNewFolder" Header="Add New Folder" Click="MenuItem_Click_NewFolder"/>
                     <MenuItem x:Name="AddNewLink" Header="Add New Link" Click="MenuItem_Click_NewLink"/>
                     <MenuItem x:Name="Edit" Header="Edit Item" Click="MenuItem_Click_Edit"/>
+                    <MenuItem x:Name="Delete" Header="Delete Item" Click="MenuItem_Click_Delete"/>
                     <MenuItem x:Name="SetLinkToTab" Header="Set Link To Current Tab(Chrome)" Click="MenuItem_Click_SetLink"/>
                 </ContextMenu>
             </ListBox.ContextMenu>
@@ -36,5 +37,7 @@
         <TextBox Name="NoteTextBox" Grid.Column="1" HorizontalAlignment="Right" Margin="0,0,10,10" TextWrapping="Wrap" Width="156" Height="177" VerticalAlignment="Bottom" FontSize="20" IsReadOnly="True"/>
         <TextBox x:Name="SearchTextBox" Grid.Column="1" HorizontalAlignment="Left" Margin="40,60,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="156" TextChanged="SearchInput" Height="30" Background="White" FontSize="20"/>
         <Label Content="Search" Margin="40,43,10,0" Grid.Column="1" Height="17" VerticalAlignment="Top" Padding="0,0,0,0"/>
+        <CheckBox x:Name="ShowDeletedCheck" Content="Show Deleted" Margin="40,100,10,0" Grid.Column="1" Height="17" VerticalAlignment="Top" Click="ShowDeletedCheck_Checked"/>
+        <CheckBox x:Name="ShowAllLinksCheck" Content="Show All Links" Margin="40,122,10,0" Grid.Column="1" Height="17" VerticalAlignment="Top" Click="ShowAllLinksCheck_Checked"/>
     </Grid>
 </Window>
