@@ -1,0 +1,9 @@
+Items are listed in order of priority with the first being the highest priority.
+
+----Items----
+
+
+
+----Fixed----
+
+When adding a new link if enter is pressed without typing a note there should be no note in the link. Currently note is "note".

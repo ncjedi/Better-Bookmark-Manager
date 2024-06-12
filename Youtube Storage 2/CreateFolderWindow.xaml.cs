@@ -28,7 +28,8 @@ namespace Youtube_Storage_2
             InitializeComponent();
             this.edit = edit;
 
-            if (parent.FolderMenuList.SelectedItem != null)
+            //Sets the object to edit
+            if (parent.FolderMenuList.SelectedItem != null && edit)
             {
                 selected = parent.GetCurrentFolder().GetFolders()[int.Parse(((MainWindow.Transfer)parent.FolderMenuList.SelectedItem).Index)];
             }

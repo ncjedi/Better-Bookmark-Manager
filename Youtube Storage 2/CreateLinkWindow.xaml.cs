@@ -20,6 +20,7 @@ namespace Youtube_Storage_2
     public partial class CreateLinkWindow : Window
     {
         bool edit;
+        bool noteTyped;
         MainWindow parent = (MainWindow)Application.Current.MainWindow;
         Link selected = new Link();
 
@@ -29,7 +30,8 @@ namespace Youtube_Storage_2
 
             this.edit = edit;
 
-            if (parent.FolderMenuList.SelectedItem != null)
+            //Sets the object to edit
+            if (parent.FolderMenuList.SelectedItem != null && edit)
             {
                 selected = parent.GetCurrentFolder().GetLinks()[int.Parse(((MainWindow.Transfer)parent.FolderMenuList.SelectedItem).Index)];
             }
@@ -42,6 +44,12 @@ namespace Youtube_Storage_2
 
                 this.Title = "Edit Link";
                 CreateButton.Content = "Finish";
+
+                noteTyped = true;
+            }
+            else
+            {
+                noteTyped = false;
             }
         }
 
@@ -127,6 +135,11 @@ namespace Youtube_Storage_2
 
                 if (!edit)
                 {
+                    if(!noteTyped)
+                    {
+                        NoteText.Text = "";
+                    }
+
                     parent.GetCurrentFolder().AddLink(NameText.Text, LinkText.Text, NoteText.Text);
                 }
                 else
@@ -142,6 +155,7 @@ namespace Youtube_Storage_2
             {
                 if (NoteText.Text == "Note" && !edit)
                 {
+                    noteTyped = true;
                     NoteText.Text = "";
                 }
                 else if (NoteText.Text == selected.Note && edit)

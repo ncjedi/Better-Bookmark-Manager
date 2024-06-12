@@ -1,0 +1,27 @@
+Items are listed in order of priority with the first being the highest priority.
+
+----Items----
+
+View all links button
+
+Delete item option
+
+Saving
+
+View deleted items button and restore deleted item option
+
+Add folder and link icons
+
+Ability to add time to youtube links
+
+	from context menu in edit/create link window probably
+
+		Will open new window to input a time
+
+	Checks if a time already exists and replaces it if it does
+
+Tidy up windows
+
+----Implimented----
+
+Search

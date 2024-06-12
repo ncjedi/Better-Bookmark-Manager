@@ -134,6 +134,32 @@ namespace Youtube_Storage_2
             }
         }
 
+        //Filters the list based on search
+        void SearchFolderList(string search = "")
+        {
+            RefreshFolderList();
+
+            if(search == "")
+            {
+                return;
+            }
+
+            List<Transfer> items = new List<Transfer>();
+
+            foreach(Transfer item in FolderMenuList.Items)
+            {
+                items.Add(item);
+            }
+
+            foreach (Transfer item in items)
+            {
+                if(!item.ItemName.ToLower().Contains(search.ToLower()) || item.Type == "P")
+                {
+                    FolderMenuList.Items.Remove(item);
+                }
+            }
+        }
+
         private void MenuItem_Click()
         {
 
@@ -279,6 +305,11 @@ namespace Youtube_Storage_2
             Transfer selected = (Transfer)FolderMenuList.SelectedItem;
 
             currentFolder.GetLinks()[int.Parse(selected.Index)].SetLinkStr(StaticFunctions.GetActiveTabUrl());
+        }
+
+        private void SearchInput(object sender, TextChangedEventArgs e)
+        {
+            SearchFolderList(SearchTextBox.Text);
         }
     }
 }
