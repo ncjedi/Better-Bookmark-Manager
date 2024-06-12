@@ -1,0 +1,15 @@
+Items are listed in order of priority with the first being the highest priority.
+
+----Items----
+
+Search
+
+View all links button
+
+Delete item option
+
+View deleted items button and restore deleted item option
+
+Add folder and link icons
+
+Tidy up windows
