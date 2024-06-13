@@ -2,14 +2,6 @@ Items are listed in order of priority with the first being the highest priority.
 
 ----Items----
 
-View all links button
-
-Saving
-
-View deleted items button and restore deleted item option
-
-Add folder and link icons
-
 Ability to add time to youtube links
 
 	from context menu in edit/create link window probably
@@ -22,8 +14,26 @@ Tidy up windows
 
 Ability to import links from original youtube storage (if it's not too hard)
 
+Add customization options (change icon image, colours, etc.)
+
+----Items----
+
+Implimented items are listed in the order they were implimented with the first implimented being at the top and the last being at the bottom.
+
 ----Implimented----
 
 Search
 
 Delete item option
+
+View all links button
+
+Saving
+
+View deleted items button and restore deleted item option
+
+perminately delete option
+
+Add folder and link icons
+
+----Implimented----

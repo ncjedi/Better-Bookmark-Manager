@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Youtube_Storage_2
 {
     public class Link
     {
+        [XmlIgnore]
+        public Folder Parent { get; set; } = null;
         public string Name { get; set; } = "";
         public string LinkStr { get; set; } = "";
         public string Note { get; set; } = "";

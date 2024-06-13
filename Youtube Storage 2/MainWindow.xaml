@@ -19,6 +19,8 @@
                     <MenuItem x:Name="Edit" Header="Edit Item" Click="MenuItem_Click_Edit"/>
                     <MenuItem x:Name="Delete" Header="Delete Item" Click="MenuItem_Click_Delete"/>
                     <MenuItem x:Name="SetLinkToTab" Header="Set Link To Current Tab(Chrome)" Click="MenuItem_Click_SetLink"/>
+                    <MenuItem x:Name="DeleteRestore" Header="Restore Item" Click="MenuItem_Click_DeleteRestore"/>
+                    <MenuItem x:Name="DeletePerminate" Header="Perminately Delete Item" Click="MenuItem_Click_DeletePerminate"/>
                 </ContextMenu>
             </ListBox.ContextMenu>
             <ListBox.ItemTemplate>

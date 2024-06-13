@@ -3,14 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Youtube_Storage_2
 {
+    [Serializable]
     public class Folder
     {
-        List<Folder> folders = new List<Folder>();
-        List<Link> links = new List<Link>();
-        List<Link> allLinks = new List<Link>(); //Only used by the main folder. Contains all links of all folders
+        public List<Folder> folders = new List<Folder>();
+        public List<Link> links = new List<Link>();
+        [XmlIgnore]
+        public List<Link> allLinks = new List<Link>(); //Only used by the main folder. Contains all links of all folders
+        [XmlIgnore]
         public Folder Parent { get; set; } = null;
         public string Name { get; set; } = "";
         public bool Hidden { get; set; } = false;
@@ -80,6 +84,7 @@ namespace Youtube_Storage_2
             link.Name = name;
             link.LinkStr = linkStr;
             link.Note = note;
+            link.Parent = this;
 
             links.Add(link);
             SendToAllLinks(link);
@@ -88,6 +93,19 @@ namespace Youtube_Storage_2
         public void RemoveLink(int index)
         {
             links.RemoveAt(index);
+        }
+
+        public void RemoveFromAllLinks(Link link)
+        {
+            Folder folder = this;
+
+            //Return to the main folder
+            while (folder.Parent != null)
+            {
+                folder = folder.Parent;
+            }
+
+            folder.allLinks.Remove(link);
         }
 
         public void HideLink(int index)
@@ -100,6 +118,20 @@ namespace Youtube_Storage_2
             links[index].Hidden = false;
         }
 
+        public void DeserializeFolders()
+        {
+            foreach(Folder folder in folders)
+            {
+                folder.Parent = this;
+                folder.DeserializeFolders();
+            }
+            foreach(Link link in links)
+            {
+                link.Parent = this;
+                SendToAllLinks(link);
+            }
 
+            allLinks.Reverse();
+        }
     }
 }

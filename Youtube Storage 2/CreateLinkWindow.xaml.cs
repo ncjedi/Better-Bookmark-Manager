@@ -33,7 +33,7 @@ namespace Youtube_Storage_2
             //Sets the object to edit
             if (parent.FolderMenuList.SelectedItem != null && edit)
             {
-                selected = parent.GetCurrentFolder().GetLinks()[int.Parse(((MainWindow.Transfer)parent.FolderMenuList.SelectedItem).Index)];
+                selected = parent.GetLinkBySelected((MainWindow.Transfer)parent.FolderMenuList.SelectedItem);
             }
 
             if (edit)
