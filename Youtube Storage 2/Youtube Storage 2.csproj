@@ -6,6 +6,21 @@
     <RootNamespace>Youtube_Storage_2</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>DAN.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Icons\folder.png" />
+    <None Remove="Icons\Link.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="DAN.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Icons\folder.png" />
+    <Resource Include="Icons\Link.png" />
+  </ItemGroup>
 
 </Project>

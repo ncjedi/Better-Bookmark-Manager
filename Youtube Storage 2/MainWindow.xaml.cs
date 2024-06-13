@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml.Serialization;
+using static Youtube_Storage_2.MainWindow;
 
 namespace Youtube_Storage_2
 {
@@ -27,6 +28,9 @@ namespace Youtube_Storage_2
     {
         Folder currentFolder;
         Settings settings = new Settings();
+        public string ParentIconPath { get; set; } = "\\Icons\\folder.png";
+        public string FolderIconPath { get; set; } = "\\Icons\\folder.png";
+        public string LinkIconPath { get; set; } = "\\Icons\\Link.png";
 
         public Folder GetCurrentFolder()
         {
@@ -51,6 +55,7 @@ namespace Youtube_Storage_2
         public MainWindow()
         {
             InitializeComponent();
+
             LoadData();
 
             /*TESTING
@@ -76,6 +81,10 @@ namespace Youtube_Storage_2
                 StreamReader stream = new StreamReader("./Data/data.xml");
 
                 currentFolder = (Folder)xmlSerializer.Deserialize(stream);
+
+                stream.Close();
+
+                currentFolder.DeserializeFolders();
             }
             else
             {
@@ -85,21 +94,65 @@ namespace Youtube_Storage_2
                 StreamWriter stream = new StreamWriter("./Data/data.xml");
 
                 xmlSerializer.Serialize(stream, currentFolder);
+
+                stream.Close();
             }
         }
 
-        public void RefreshFolderList()
+        void SaveData()
+        {
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(Folder));
+
+            Folder saveFolder = currentFolder;
+
+            while(saveFolder.Parent != null)
+            {
+                saveFolder = saveFolder.Parent;
+            }
+
+            StreamWriter stream = new StreamWriter("./Data/data.xml");
+            xmlSerializer.Serialize(stream, saveFolder);
+            stream.Close();
+        }
+
+        //Shows or hides deleted items based on the Show Deleted checkbox
+        public void HideDeleted()
+        {
+            List<Transfer> items = new List<Transfer>();
+
+            foreach (Transfer item in FolderMenuList.Items)
+            {
+                items.Add(item);
+            }
+
+            foreach (Transfer item in items)
+            {
+                if(item.Type == "P")
+                {
+                    continue;
+                }
+
+                if (item.Hidden == "T" && ShowDeletedCheck.IsChecked == false)
+                {
+                    FolderMenuList.Items.Remove(item);
+                }
+                else if(item.Hidden == "F" && ShowDeletedCheck.IsChecked == true)
+                {
+                    FolderMenuList.Items.Remove(item);
+                }
+            }
+        }
+
+        void NormalRefreshList()
         {
             Transfer transfer = new Transfer();
             Folder folder;
             Link link;
 
-            FolderMenuList.Items.Clear();
-
-            if(currentFolder.Parent != null) 
+            if (currentFolder.Parent != null)
             {
                 transfer.ItemName = "(Back)";
-                transfer.ItemImage = "C:\\Users\\Chris\\Pictures\\8d7d52621ddef15795b1ae815a8bc5a3.jpg";
+                transfer.ItemImage = ParentIconPath;
                 transfer.Type = "P";
                 transfer.Hidden = "F";
                 transfer.Index = "0";
@@ -112,9 +165,17 @@ namespace Youtube_Storage_2
                 folder = currentFolder.GetFolders()[i];
 
                 transfer.ItemName = folder.Name;
-                transfer.ItemImage = "C:\\Users\\Chris\\Pictures\\8d7d52621ddef15795b1ae815a8bc5a3.jpg";
+                transfer.ItemImage = FolderIconPath;
                 transfer.Type = "F";
-                transfer.Hidden = "F";
+
+                if (folder.Hidden)
+                {
+                    transfer.Hidden = "T";
+                }
+                else
+                {
+                    transfer.Hidden = "F";
+                }
                 transfer.Index = i.ToString();
 
                 FolderMenuList.Items.Add(transfer);
@@ -125,19 +186,92 @@ namespace Youtube_Storage_2
                 link = currentFolder.GetLinks()[i];
 
                 transfer.ItemName = link.Name;
-                transfer.ItemImage = "C:\\Users\\Chris\\Pictures\\8d7d52621ddef15795b1ae815a8bc5a3.jpg";
+                transfer.ItemImage = LinkIconPath;
                 transfer.Type = "L";
-                transfer.Hidden = "F";
+
+                if (link.Hidden)
+                {
+                    transfer.Hidden = "T";
+                }
+                else
+                {
+                    transfer.Hidden = "F";
+                }
+
                 transfer.Index = i.ToString();
 
                 FolderMenuList.Items.Add(transfer);
             }
         }
 
-        //Filters the list based on search
-        void SearchFolderList(string search = "")
+        void AllLinksRefreshList()
         {
-            RefreshFolderList();
+            Transfer transfer = new Transfer();
+            Link link;
+
+            while (currentFolder.Parent != null)
+            {
+                currentFolder = currentFolder.Parent;
+            }
+
+            for (int i = 0; i < currentFolder.GetAllLinks().Count; i++)
+            {
+                link = currentFolder.GetAllLinks()[i];
+
+                transfer.ItemName = link.Name;
+                transfer.ItemImage = "C:\\Users\\Chris\\Pictures\\8d7d52621ddef15795b1ae815a8bc5a3.jpg";
+                transfer.Type = "L";
+
+                if (link.Hidden)
+                {
+                    transfer.Hidden = "T";
+                }
+                else
+                {
+                    transfer.Hidden = "F";
+                }
+
+                transfer.Index = i.ToString();
+
+                FolderMenuList.Items.Add(transfer);
+            }
+        }
+
+        public void RefreshFolderList()
+        {
+            int refreshType;
+
+            if (ShowAllLinksCheck.IsChecked == true)
+            {
+                refreshType = 1;
+            }
+            else
+            {
+                refreshType = 0;
+            }
+
+            FolderMenuList.Items.Clear();
+
+            //Load data into the list based on the refresh type
+            switch(refreshType)
+            {
+                case 0:
+                    NormalRefreshList();
+                    break;
+                case 1:
+                    AllLinksRefreshList();
+                    break;
+            }
+
+            //Filter the list
+            SearchFolderList();
+            HideDeleted();
+        }
+
+        //Filters the list based on search
+        void SearchFolderList()
+        {
+            string search = SearchTextBox.Text;
 
             if(search == "")
             {
@@ -185,7 +319,7 @@ namespace Youtube_Storage_2
 
             if (selected.Type == "L")
             {
-                NoteTextBox.Text = currentFolder.GetLinks()[int.Parse(selected.Index)].Note;
+                NoteTextBox.Text = GetLinkBySelected(selected).Note;
             }
             else
             {
@@ -224,7 +358,7 @@ namespace Youtube_Storage_2
             //If a link is clicked open it in the selected browser
             else if (selected.Type == "L")
             {
-                Process.Start(settings.BrowserPath, currentFolder.GetLinks()[int.Parse(selected.Index)].LinkStr);
+                Process.Start(settings.BrowserPath, GetLinkBySelected(selected).LinkStr);
             }
         }
 
@@ -235,9 +369,20 @@ namespace Youtube_Storage_2
             //Disables edit button
             ((MenuItem)FolderMenuList.ContextMenu.Items[2]).IsEnabled = false;
 
-            //Disables and hides the set link button
+            //Disables delete button
             ((MenuItem)FolderMenuList.ContextMenu.Items[3]).IsEnabled = false;
-            ((MenuItem)FolderMenuList.ContextMenu.Items[3]).Visibility = Visibility.Collapsed;
+
+            //Disables and hides the set link button
+            ((MenuItem)FolderMenuList.ContextMenu.Items[4]).IsEnabled = false;
+            ((MenuItem)FolderMenuList.ContextMenu.Items[4]).Visibility = Visibility.Collapsed;
+
+            //Disables and hides the restore deleted button
+            ((MenuItem)FolderMenuList.ContextMenu.Items[5]).IsEnabled = false;
+            ((MenuItem)FolderMenuList.ContextMenu.Items[5]).Visibility = Visibility.Collapsed;
+
+            //Disables and hides the perminately delete button
+            ((MenuItem)FolderMenuList.ContextMenu.Items[6]).IsEnabled = false;
+            ((MenuItem)FolderMenuList.ContextMenu.Items[6]).Visibility = Visibility.Collapsed;
 
             if (FolderMenuList.SelectedItem != null)
             {
@@ -251,15 +396,30 @@ namespace Youtube_Storage_2
             if(selected.Type == "F")
             {
                 ((MenuItem)FolderMenuList.ContextMenu.Items[2]).IsEnabled = true; //Enable edit button
+                ((MenuItem)FolderMenuList.ContextMenu.Items[3]).IsEnabled = true; //Enable delete button
             }
 
             else if (selected.Type == "L")
             {
                 ((MenuItem)FolderMenuList.ContextMenu.Items[2]).IsEnabled = true; //Enable edit button
+                ((MenuItem)FolderMenuList.ContextMenu.Items[3]).IsEnabled = true; //Enable delete button
 
                 //Enables the set link button
-                ((MenuItem)FolderMenuList.ContextMenu.Items[3]).IsEnabled = true;
-                ((MenuItem)FolderMenuList.ContextMenu.Items[3]).Visibility = Visibility.Visible;
+                ((MenuItem)FolderMenuList.ContextMenu.Items[4]).IsEnabled = true;
+                ((MenuItem)FolderMenuList.ContextMenu.Items[4]).Visibility = Visibility.Visible;
+            }
+
+            if(ShowDeletedCheck.IsChecked == true && selected.Type != "P")
+            {
+                ((MenuItem)FolderMenuList.ContextMenu.Items[3]).IsEnabled = false; //Redisable delete button
+
+                //Enables the restore deleted button
+                ((MenuItem)FolderMenuList.ContextMenu.Items[5]).IsEnabled = true;
+                ((MenuItem)FolderMenuList.ContextMenu.Items[5]).Visibility = Visibility.Visible;
+
+                //Enables the perminately delete button
+                ((MenuItem)FolderMenuList.ContextMenu.Items[6]).IsEnabled = true;
+                ((MenuItem)FolderMenuList.ContextMenu.Items[6]).Visibility = Visibility.Visible;
             }
         }
 
@@ -269,6 +429,7 @@ namespace Youtube_Storage_2
 
             createFolderWindow.ShowDialog();
 
+            SaveData();
             RefreshFolderList();
         }
 
@@ -278,6 +439,7 @@ namespace Youtube_Storage_2
 
             createLinkWindow.ShowDialog();
 
+            SaveData();
             RefreshFolderList();
         }
 
@@ -297,19 +459,111 @@ namespace Youtube_Storage_2
                 createLinkWindow.ShowDialog();
             }
 
-                RefreshFolderList();
+            SaveData();
+            RefreshFolderList();
         }
 
         private void MenuItem_Click_SetLink(object sender, RoutedEventArgs e)
         {
             Transfer selected = (Transfer)FolderMenuList.SelectedItem;
 
-            currentFolder.GetLinks()[int.Parse(selected.Index)].SetLinkStr(StaticFunctions.GetActiveTabUrl());
+            GetLinkBySelected(selected).SetLinkStr(StaticFunctions.GetActiveTabUrl());
+
+            SaveData();
+        }
+
+        private void MenuItem_Click_Delete(object sender, RoutedEventArgs e)
+        {
+            Transfer selected = (Transfer)FolderMenuList.SelectedItem;
+
+            if(selected.Type == "F")
+            {
+                currentFolder.GetFolders()[int.Parse(selected.Index)].Hidden = true;
+            }
+            else if(selected.Type == "L")
+            {
+                GetLinkBySelected(selected).Hidden = true;
+            }
+
+            SaveData();
+            RefreshFolderList();
+        }
+
+        //returns the link represented by the transfer passed into the function. 
+        public Link GetLinkBySelected(Transfer selected)
+        {
+            if(ShowAllLinksCheck.IsChecked == true)
+            {
+                return currentFolder.GetAllLinks()[int.Parse(selected.Index)];
+            }
+            else
+            {
+                return currentFolder.GetLinks()[int.Parse(selected.Index)];
+            }
+        }
+
+        public List<Link> GetLinkList()
+        {
+            if (ShowAllLinksCheck.IsChecked == true)
+            {
+                return currentFolder.GetAllLinks();
+            }
+            else
+            {
+                return currentFolder.GetLinks();
+            }
         }
 
         private void SearchInput(object sender, TextChangedEventArgs e)
         {
-            SearchFolderList(SearchTextBox.Text);
+            RefreshFolderList();
+        }
+
+        private void ShowDeletedCheck_Checked(object sender, RoutedEventArgs e)
+        {
+            RefreshFolderList();
+        }
+
+        private void ShowAllLinksCheck_Checked(object sender, RoutedEventArgs e)
+        {
+            RefreshFolderList();
+        }
+
+        private void MenuItem_Click_DeleteRestore(object sender, RoutedEventArgs e)
+        {
+            Transfer selected = (Transfer)FolderMenuList.SelectedItem;
+
+            if (selected.Type == "F")
+            {
+                currentFolder.GetFolders()[int.Parse(selected.Index)].Hidden = false;
+            }
+            else if (selected.Type == "L")
+            {
+                GetLinkBySelected(selected).Hidden = false;
+            }
+
+            SaveData();
+            RefreshFolderList();
+        }
+
+        private void MenuItem_Click_DeletePerminate(object sender, RoutedEventArgs e)
+        {
+            Transfer selected = (Transfer)FolderMenuList.SelectedItem;
+
+            if (selected.Type == "F")
+            {
+                currentFolder.RemoveFolder(int.Parse(selected.Index));
+            }
+            else if (selected.Type == "L")
+            {
+                Link link = GetLinkBySelected(selected);
+
+                currentFolder.RemoveFromAllLinks(link);
+                link.Parent.links.Remove(link);
+            }
+
+            SaveData();
+            RefreshFolderList();
         }
     }
 }
