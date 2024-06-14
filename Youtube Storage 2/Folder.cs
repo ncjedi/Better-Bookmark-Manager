@@ -44,6 +44,13 @@ namespace Youtube_Storage_2
             folders.Add(folder);
         }
 
+        public void AddFolder(Folder folder)
+        {
+            folder.Parent = this;
+
+            folders.Add(folder);
+        }
+
         public void RemoveFolder(int index)
         {
             folders.RemoveAt(index);
@@ -84,6 +91,14 @@ namespace Youtube_Storage_2
             link.Name = name;
             link.LinkStr = linkStr;
             link.Note = note;
+            link.Parent = this;
+
+            links.Add(link);
+            SendToAllLinks(link);
+        }
+
+        public void AddLink(Link link)
+        {
             link.Parent = this;
 
             links.Add(link);

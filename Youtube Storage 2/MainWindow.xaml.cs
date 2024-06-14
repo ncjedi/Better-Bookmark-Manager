@@ -28,9 +28,6 @@ namespace Youtube_Storage_2
     {
         Folder currentFolder;
         Settings settings = new Settings();
-        public string ParentIconPath { get; set; } = "\\Icons\\folder.png";
-        public string FolderIconPath { get; set; } = "\\Icons\\folder.png";
-        public string LinkIconPath { get; set; } = "\\Icons\\Link.png";
 
         public Folder GetCurrentFolder()
         {
@@ -152,7 +149,7 @@ namespace Youtube_Storage_2
             if (currentFolder.Parent != null)
             {
                 transfer.ItemName = "(Back)";
-                transfer.ItemImage = ParentIconPath;
+                transfer.ItemImage = settings.ParentIconPath;
                 transfer.Type = "P";
                 transfer.Hidden = "F";
                 transfer.Index = "0";
@@ -165,7 +162,7 @@ namespace Youtube_Storage_2
                 folder = currentFolder.GetFolders()[i];
 
                 transfer.ItemName = folder.Name;
-                transfer.ItemImage = FolderIconPath;
+                transfer.ItemImage = settings.FolderIconPath;
                 transfer.Type = "F";
 
                 if (folder.Hidden)
@@ -186,7 +183,7 @@ namespace Youtube_Storage_2
                 link = currentFolder.GetLinks()[i];
 
                 transfer.ItemName = link.Name;
-                transfer.ItemImage = LinkIconPath;
+                transfer.ItemImage = settings.LinkIconPath;
                 transfer.Type = "L";
 
                 if (link.Hidden)
@@ -219,7 +216,7 @@ namespace Youtube_Storage_2
                 link = currentFolder.GetAllLinks()[i];
 
                 transfer.ItemName = link.Name;
-                transfer.ItemImage = "C:\\Users\\Chris\\Pictures\\8d7d52621ddef15795b1ae815a8bc5a3.jpg";
+                transfer.ItemImage = settings.LinkIconPath;
                 transfer.Type = "L";
 
                 if (link.Hidden)
@@ -346,6 +343,7 @@ namespace Youtube_Storage_2
             {
                 currentFolder = currentFolder.Parent;
                 RefreshFolderList();
+                SearchTextBox.Text = "";
             }
 
             //If a folder is clicked go into it
@@ -353,6 +351,7 @@ namespace Youtube_Storage_2
             {
                 currentFolder = currentFolder.GetFolders()[int.Parse(selected.Index)];
                 RefreshFolderList();
+                SearchTextBox.Text = "";
             }
 
             //If a link is clicked open it in the selected browser
@@ -384,6 +383,10 @@ namespace Youtube_Storage_2
             ((MenuItem)FolderMenuList.ContextMenu.Items[6]).IsEnabled = false;
             ((MenuItem)FolderMenuList.ContextMenu.Items[6]).Visibility = Visibility.Collapsed;
 
+            //Disables and hides the add time button
+            ((MenuItem)FolderMenuList.ContextMenu.Items[7]).IsEnabled = false;
+            ((MenuItem)FolderMenuList.ContextMenu.Items[7]).Visibility = Visibility.Collapsed;
+
             if (FolderMenuList.SelectedItem != null)
             {
                 selected = (Transfer)FolderMenuList.SelectedItem;
@@ -407,6 +410,10 @@ namespace Youtube_Storage_2
                 //Enables the set link button
                 ((MenuItem)FolderMenuList.ContextMenu.Items[4]).IsEnabled = true;
                 ((MenuItem)FolderMenuList.ContextMenu.Items[4]).Visibility = Visibility.Visible;
+
+                //Enables the add time button
+                ((MenuItem)FolderMenuList.ContextMenu.Items[7]).IsEnabled = true;
+                ((MenuItem)FolderMenuList.ContextMenu.Items[7]).Visibility = Visibility.Visible;
             }
 
             if(ShowDeletedCheck.IsChecked == true && selected.Type != "P")
@@ -514,6 +521,133 @@ namespace Youtube_Storage_2
             }
         }
 
+        void ImportUncategorizedLinks(string mainDirectory, Folder mainFolder)
+        {
+                foreach (string file in File.ReadAllLines($"{mainDirectory}\\aaaall63672\\AAAseries.txt"))
+                {
+                    if (file.Contains("-"))
+                    {
+                        continue;
+                    }
+
+                    bool editLink = false;
+                    Link linkToCreate = new Link();
+                    string[] contents;
+                    string note = "";
+                    string filePath = $"{mainDirectory}\\aaaall63672\\{file}.txt";
+                    int i = 2;
+
+                    linkToCreate.Name = file;
+
+                    foreach (Link link in mainFolder.links)
+                    {
+                        if (link.Name == linkToCreate.Name)
+                        {
+                            linkToCreate = link;
+                            editLink = true;
+                            break;
+                        }
+                    }
+
+                    contents = File.ReadAllLines(filePath);
+
+                    linkToCreate.SetLinkStr(contents[0]);
+
+                    while (i < contents.Length)
+                    {
+                        note += contents[i] + "\n";
+                        i++;
+                    }
+
+                    linkToCreate.Note = note;
+
+                    if (!editLink)
+                    {
+                        mainFolder.AddLink(linkToCreate);
+                    }
+                }
+            }
+
+        public void ImportPressed()
+        {
+            string mainDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\YoutubeStorage";
+            Folder mainFolder = currentFolder;
+
+            while (mainFolder.Parent != null)
+            {
+                mainFolder = mainFolder.Parent;
+            }
+
+            foreach (string directory in File.ReadAllLines($"{mainDirectory}\\AAApeeps.txt"))
+            {
+                bool editFolder = false;
+                string directoryPath = $"{mainDirectory}\\{directory}";
+                Folder folderToCreate = new Folder();
+                folderToCreate.Name = directory;
+
+                foreach (Folder folder in mainFolder.folders)
+                {
+                    if (folder.Name == folderToCreate.Name)
+                    {
+                        folderToCreate = folder;
+                        editFolder = true;
+                        break;
+                    }
+                }
+
+                if (!editFolder)
+                {
+                    mainFolder.AddFolder(folderToCreate);
+                }
+
+                foreach (string file in File.ReadAllLines($"{directoryPath}\\AAAseries.txt"))
+                {
+                    if (System.IO.Path.GetFileNameWithoutExtension(file) == "AAAseries")
+                    {
+                        continue;
+                    }
+
+                    bool editLink = false;
+                    Link linkToCreate = new Link();
+                    string[] contents;
+                    string note = "";
+                    string filePath = $"{directoryPath}\\{file}.txt";
+                    int i = 2;
+
+                    linkToCreate.Name = file;
+
+                    foreach (Link link in folderToCreate.links)
+                    {
+                        if (link.Name == linkToCreate.Name)
+                        {
+                            linkToCreate = link;
+                            editLink = true;
+                            break;
+                        }
+                    }
+
+                    contents = File.ReadAllLines(filePath);
+
+                    linkToCreate.SetLinkStr(contents[0]);
+
+                    while (i < contents.Length)
+                    {
+                        note += contents[i] + "\n";
+                        i++;
+                    }
+
+                    linkToCreate.Note = note;
+
+                    if (!editLink)
+                    {
+                        folderToCreate.AddLink(linkToCreate);
+                    }
+                }
+
+                ImportUncategorizedLinks(mainDirectory, mainFolder);
+            }
+        }
+
         private void SearchInput(object sender, TextChangedEventArgs e)
         {
             RefreshFolderList();
@@ -561,6 +695,25 @@ namespace Youtube_Storage_2
                 currentFolder.RemoveFromAllLinks(link);
                 link.Parent.links.Remove(link);
             }
+
+            SaveData();
+            RefreshFolderList();
+        }
+
+        private void SettingsButtonClicked(object sender, RoutedEventArgs e)
+        {
+            SettingsWindow settingsWindow = new SettingsWindow();
+
+            settingsWindow.ShowDialog();
+
+            SaveData();
+            RefreshFolderList();
+        }
+
+        private void MenuItem_Click_AddTime(object sender, RoutedEventArgs e)
+        {
+            AddTimeWindow addTimeWindow = new AddTimeWindow();
+            addTimeWindow.ShowDialog();
 
             SaveData();
             RefreshFolderList();
