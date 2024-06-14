@@ -12,7 +12,7 @@ Ability to add time to youtube links
 
 Tidy up windows
 
-Ability to import links from original youtube storage (if it's not too hard)
+View link history
 
 Add customization options (change icon image, colours, etc.)
 
@@ -35,5 +35,7 @@ View deleted items button and restore deleted item option
 perminately delete option
 
 Add folder and link icons
+
+Ability to import links from original youtube storage (if it's not too hard)
 
 ----Implimented----
