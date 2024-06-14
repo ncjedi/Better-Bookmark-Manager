@@ -27,7 +27,7 @@ namespace Youtube_Storage_2
     public partial class MainWindow : Window
     {
         Folder currentFolder;
-        Settings settings = new Settings();
+        public Settings settings = new Settings();
 
         public Folder GetCurrentFolder()
         {
@@ -54,6 +54,7 @@ namespace Youtube_Storage_2
             InitializeComponent();
 
             LoadData();
+            LoadSettings();
 
             /*TESTING
             currentFolder.AddFolder("JAKE");
@@ -96,6 +97,30 @@ namespace Youtube_Storage_2
             }
         }
 
+        void LoadSettings()
+        {
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(Settings));
+
+            if (File.Exists("./Data/settings.xml"))
+            {
+                StreamReader stream = new StreamReader("./Data/settings.xml");
+
+                settings = (Settings)xmlSerializer.Deserialize(stream);
+
+                stream.Close();
+            }
+            else
+            {
+                settings = new Settings();
+
+                StreamWriter stream = new StreamWriter("./Data/settings.xml");
+
+                xmlSerializer.Serialize(stream, settings);
+
+                stream.Close();
+            }
+        }
+
         void SaveData()
         {
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(Folder));
@@ -109,6 +134,15 @@ namespace Youtube_Storage_2
 
             StreamWriter stream = new StreamWriter("./Data/data.xml");
             xmlSerializer.Serialize(stream, saveFolder);
+            stream.Close();
+        }
+
+        void SaveSettings()
+        {
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(Settings));
+
+            StreamWriter stream = new StreamWriter("./Data/settings.xml");
+            xmlSerializer.Serialize(stream, settings);
             stream.Close();
         }
 
@@ -707,6 +741,7 @@ namespace Youtube_Storage_2
             settingsWindow.ShowDialog();
 
             SaveData();
+            SaveSettings();
             RefreshFolderList();
         }
 

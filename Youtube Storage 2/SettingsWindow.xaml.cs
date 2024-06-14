@@ -29,5 +29,29 @@ namespace Youtube_Storage_2
         {
             parent.ImportPressed();
         }
+
+        private void BrowserPicker_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if(BrowserPicker.SelectedIndex == 0) 
+            {
+                parent.settings.BrowserPath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
+            }
+            else if(BrowserPicker.SelectedIndex == 1)
+            {
+                parent.settings.BrowserPath = "C:\\Program Files\\Mozilla Firefox\\firefox.exe";
+            }
+        }
+
+        private void WindowContentRendered(object sender, EventArgs e)
+        {
+            if (parent.settings.BrowserPath == "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe")
+            {
+                BrowserPicker.SelectedIndex = 0;
+            }
+            else if (parent.settings.BrowserPath == "C:\\Program Files\\Mozilla Firefox\\firefox.exe")
+            {
+                BrowserPicker.SelectedIndex = 1;
+            }
+        }
     }
 }

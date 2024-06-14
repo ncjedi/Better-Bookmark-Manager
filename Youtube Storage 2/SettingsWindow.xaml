@@ -5,10 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Youtube_Storage_2"
         mc:Ignorable="d"
-        Title="SettingsWindow" Height="400" Width="700">
+        Title="SettingsWindow" Height="400" Width="700" ContentRendered="WindowContentRendered">
     <Grid>
         <Button Content="Import" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="100" Height="30" Click="ImportButtonPressed"/>
         <Label Content="Imports links and folders from the original Youtube Storage" HorizontalAlignment="Left" Margin="134,10,0,0" VerticalAlignment="Top" Width="556"/>
+        <ComboBox x:Name="BrowserPicker" HorizontalAlignment="Left" Margin="10,63,0,0" VerticalAlignment="Top" Width="114" SelectionChanged="BrowserPicker_SelectionChanged">
+            <ComboBoxItem x:Name="Google_Chrome">Google Chrome</ComboBoxItem>
+            <ComboBoxItem x:Name="Firefox">Firefox</ComboBoxItem>
+        </ComboBox>
+        <Label Content="The browser that will be used to open links" HorizontalAlignment="Left" Margin="134,61,0,0" VerticalAlignment="Top" Width="312"/>
 
     </Grid>
 </Window>
