@@ -391,6 +391,10 @@ namespace Youtube_Storage_2
             //If a link is clicked open it in the selected browser
             else if (selected.Type == "L")
             {
+                if(!File.Exists(settings.BrowserPath))
+                {
+                    return;
+                }
                 Process.Start(settings.BrowserPath, GetLinkBySelected(selected).LinkStr);
             }
         }
@@ -606,6 +610,11 @@ namespace Youtube_Storage_2
         {
             string mainDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\YoutubeStorage";
             Folder mainFolder = currentFolder;
+
+            if(!Directory.Exists(mainDirectory))
+            {
+                return;
+            }
 
             while (mainFolder.Parent != null)
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,11 +35,25 @@ namespace Youtube_Storage_2
         {
             if(BrowserPicker.SelectedIndex == 0) 
             {
-                parent.settings.BrowserPath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
+                if (File.Exists("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"))
+                {
+                    parent.settings.BrowserPath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
+                }
+                else if (File.Exists("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"))
+                {
+                    parent.settings.BrowserPath = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe";
+                }
             }
             else if(BrowserPicker.SelectedIndex == 1)
             {
-                parent.settings.BrowserPath = "C:\\Program Files\\Mozilla Firefox\\firefox.exe";
+                if (File.Exists("C:\\Program Files\\Mozilla Firefox\\firefox.exe"))
+                {
+                    parent.settings.BrowserPath = "C:\\Program Files\\Mozilla Firefox\\firefox.exe";
+                }
+                else if (File.Exists("C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe"))
+                {
+                    parent.settings.BrowserPath = "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe";
+                }
             }
         }
 
