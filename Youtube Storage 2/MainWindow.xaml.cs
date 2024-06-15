@@ -399,31 +399,123 @@ namespace Youtube_Storage_2
             }
         }
 
+        ///<summary>
+        ///Button Strings: addFolder, addLink, edit, cut, copy, paste, delete, setLink, restoreDeleted, perminatelyDelete, addTime
+        ///</summary>
+        public void ContextMenuEnableDisable(string button, bool enableChoice, bool visibleChoice = true)
+        {
+            Visibility visibility;
+
+            if (visibleChoice)
+            {
+                visibility = Visibility.Visible;
+            }
+            else
+            {
+                visibility = Visibility.Collapsed;
+            }
+
+            switch(button)
+            {
+                case "addFolder":
+                    {
+                        ((MenuItem)FolderMenuList.ContextMenu.Items[0]).IsEnabled = enableChoice;
+                        ((MenuItem)FolderMenuList.ContextMenu.Items[0]).Visibility = visibility;
+                        break;
+                    }
+                case "addLink":
+                    {
+                        ((MenuItem)FolderMenuList.ContextMenu.Items[1]).IsEnabled = enableChoice;
+                        ((MenuItem)FolderMenuList.ContextMenu.Items[1]).Visibility = visibility;
+                        break;
+                    }
+                case "edit":
+                    {
+                        ((MenuItem)FolderMenuList.ContextMenu.Items[2]).IsEnabled = enableChoice;
+                        ((MenuItem)FolderMenuList.ContextMenu.Items[2]).Visibility = visibility;
+                        break;
+                    }
+                case "cut":
+                    {
+                        ((MenuItem)FolderMenuList.ContextMenu.Items[3]).IsEnabled = enableChoice;
+                        ((MenuItem)FolderMenuList.ContextMenu.Items[3]).Visibility = visibility;
+                        break;
+                    }
+                case "copy":
+                    {
+                        ((MenuItem)FolderMenuList.ContextMenu.Items[4]).IsEnabled = enableChoice;
+                        ((MenuItem)FolderMenuList.ContextMenu.Items[4]).Visibility = visibility;
+                        break;
+                    }
+                case "paste":
+                    {
+                        ((MenuItem)FolderMenuList.ContextMenu.Items[5]).IsEnabled = enableChoice;
+                        ((MenuItem)FolderMenuList.ContextMenu.Items[5]).Visibility = visibility;
+                        break;
+                    }
+                case "delete":
+                    {
+                        ((MenuItem)FolderMenuList.ContextMenu.Items[6]).IsEnabled = enableChoice;
+                        ((MenuItem)FolderMenuList.ContextMenu.Items[6]).Visibility = visibility;
+                        break;
+                    }
+                case "setLink":
+                    {
+                        ((MenuItem)FolderMenuList.ContextMenu.Items[7]).IsEnabled = enableChoice;
+                        ((MenuItem)FolderMenuList.ContextMenu.Items[7]).Visibility = visibility;
+                        break;
+                    }
+                case "restoreDeleted":
+                    {
+                        ((MenuItem)FolderMenuList.ContextMenu.Items[8]).IsEnabled = enableChoice;
+                        ((MenuItem)FolderMenuList.ContextMenu.Items[8]).Visibility = visibility;
+                        break;
+                    }
+                case "perminatelyDelete":
+                    {
+                        ((MenuItem)FolderMenuList.ContextMenu.Items[9]).IsEnabled = enableChoice;
+                        ((MenuItem)FolderMenuList.ContextMenu.Items[9]).Visibility = visibility;
+                        break;
+                    }
+                case "addTime":
+                    {
+                        ((MenuItem)FolderMenuList.ContextMenu.Items[10]).IsEnabled = enableChoice;
+                        ((MenuItem)FolderMenuList.ContextMenu.Items[10]).Visibility = visibility;
+                        break;
+                    }
+            }
+        }
+
         private void FolderListContextMenuOpen(object sender, ContextMenuEventArgs e)
         {
             Transfer selected = new Transfer();
 
             //Disables edit button
-            ((MenuItem)FolderMenuList.ContextMenu.Items[2]).IsEnabled = false;
+            ContextMenuEnableDisable("edit", false);
+
+            //Disables cut button
+            ContextMenuEnableDisable("cut", false);
+
+            //Disables copy button
+            ContextMenuEnableDisable("copy", false);
+
+            //Disables paste button
+            ContextMenuEnableDisable("paste", false);
 
             //Disables delete button
-            ((MenuItem)FolderMenuList.ContextMenu.Items[3]).IsEnabled = false;
+            ContextMenuEnableDisable("delete", false);
 
             //Disables and hides the set link button
-            ((MenuItem)FolderMenuList.ContextMenu.Items[4]).IsEnabled = false;
-            ((MenuItem)FolderMenuList.ContextMenu.Items[4]).Visibility = Visibility.Collapsed;
+            ContextMenuEnableDisable("setLink", false, false);
 
             //Disables and hides the restore deleted button
-            ((MenuItem)FolderMenuList.ContextMenu.Items[5]).IsEnabled = false;
-            ((MenuItem)FolderMenuList.ContextMenu.Items[5]).Visibility = Visibility.Collapsed;
+            ContextMenuEnableDisable("restoreDeleted", false, false);
 
             //Disables and hides the perminately delete button
-            ((MenuItem)FolderMenuList.ContextMenu.Items[6]).IsEnabled = false;
-            ((MenuItem)FolderMenuList.ContextMenu.Items[6]).Visibility = Visibility.Collapsed;
+            ContextMenuEnableDisable("perminatelyDelete", false, false);
 
             //Disables and hides the add time button
-            ((MenuItem)FolderMenuList.ContextMenu.Items[7]).IsEnabled = false;
-            ((MenuItem)FolderMenuList.ContextMenu.Items[7]).Visibility = Visibility.Collapsed;
+            ContextMenuEnableDisable("addTime", false, false);
 
             if (FolderMenuList.SelectedItem != null)
             {
@@ -436,35 +528,31 @@ namespace Youtube_Storage_2
 
             if(selected.Type == "F")
             {
-                ((MenuItem)FolderMenuList.ContextMenu.Items[2]).IsEnabled = true; //Enable edit button
-                ((MenuItem)FolderMenuList.ContextMenu.Items[3]).IsEnabled = true; //Enable delete button
+                ContextMenuEnableDisable("edit", true); //Enable edit button
+                ContextMenuEnableDisable("delete", true); //Enable delete button
             }
 
             else if (selected.Type == "L")
             {
-                ((MenuItem)FolderMenuList.ContextMenu.Items[2]).IsEnabled = true; //Enable edit button
-                ((MenuItem)FolderMenuList.ContextMenu.Items[3]).IsEnabled = true; //Enable delete button
+                ContextMenuEnableDisable("edit", true); //Enable edit button
+                ContextMenuEnableDisable("delete", true); //Enable delete button
 
                 //Enables the set link button
-                ((MenuItem)FolderMenuList.ContextMenu.Items[4]).IsEnabled = true;
-                ((MenuItem)FolderMenuList.ContextMenu.Items[4]).Visibility = Visibility.Visible;
+                ContextMenuEnableDisable("setLink", true, true);
 
                 //Enables the add time button
-                ((MenuItem)FolderMenuList.ContextMenu.Items[7]).IsEnabled = true;
-                ((MenuItem)FolderMenuList.ContextMenu.Items[7]).Visibility = Visibility.Visible;
+                ContextMenuEnableDisable("addTime", true, true);
             }
 
             if(ShowDeletedCheck.IsChecked == true && selected.Type != "P")
             {
-                ((MenuItem)FolderMenuList.ContextMenu.Items[3]).IsEnabled = false; //Redisable delete button
+                ContextMenuEnableDisable("delete", false); //Redisable delete button
 
                 //Enables the restore deleted button
-                ((MenuItem)FolderMenuList.ContextMenu.Items[5]).IsEnabled = true;
-                ((MenuItem)FolderMenuList.ContextMenu.Items[5]).Visibility = Visibility.Visible;
+                ContextMenuEnableDisable("restoreDeleted", true, true);
 
                 //Enables the perminately delete button
-                ((MenuItem)FolderMenuList.ContextMenu.Items[6]).IsEnabled = true;
-                ((MenuItem)FolderMenuList.ContextMenu.Items[6]).Visibility = Visibility.Visible;
+                ContextMenuEnableDisable("perminatelyDelete", true, true);
             }
         }
 
@@ -761,6 +849,21 @@ namespace Youtube_Storage_2
 
             SaveData();
             RefreshFolderList();
+        }
+
+        private void MenuItem_Click_Cut(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MenuItem_Click_Copy(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MenuItem_Click_Paste(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
