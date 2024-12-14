@@ -405,7 +405,7 @@ namespace Youtube_Storage_2
         }
 
         ///<summary>
-        ///Button Strings: addFolder, addLink, edit, cut, copy, paste, delete, setLink, restoreDeleted, perminatelyDelete, addTime
+        ///Button Strings: addFolder, addLink, edit, cut, copy, paste, delete, setLink, restoreDeleted, perminatelyDelete, addTime, viewHistory
         ///</summary>
         public void ContextMenuEnableDisable(string button, bool enableChoice, bool visibleChoice = true)
         {
@@ -488,6 +488,12 @@ namespace Youtube_Storage_2
                         ((MenuItem)FolderMenuList.ContextMenu.Items[10]).Visibility = visibility;
                         break;
                     }
+                case "viewHistory":
+                    {
+                        ((MenuItem)FolderMenuList.ContextMenu.Items[11]).IsEnabled = enableChoice;
+                        ((MenuItem)FolderMenuList.ContextMenu.Items[11]).Visibility = visibility;
+                        break;
+                    }
             }
         }
 
@@ -521,6 +527,9 @@ namespace Youtube_Storage_2
 
             //Disables and hides the add time button
             ContextMenuEnableDisable("addTime", false, false);
+
+            //Disables and hides the view history button
+            ContextMenuEnableDisable("viewHistory", false, false);
 
             if (!Clipboard.IsEmpty())
             {
@@ -556,6 +565,9 @@ namespace Youtube_Storage_2
 
                 //Enables the add time button
                 ContextMenuEnableDisable("addTime", true, true);
+
+                //Enables the view history button
+                ContextMenuEnableDisable("viewHistory", true, true);
             }
 
             if(ShowDeletedCheck.IsChecked == true && selected.Type != "P")
@@ -897,7 +909,14 @@ namespace Youtube_Storage_2
         {
             Clipboard.PasteItem(currentFolder);
 
+            SaveData();
             RefreshFolderList();
+        }
+
+        private void MenuItem_Click_ViewHistory(object sender, RoutedEventArgs e)
+        {
+            LinkHistoryWindow window = new LinkHistoryWindow();
+            window.ShowDialog();
         }
     }
 }

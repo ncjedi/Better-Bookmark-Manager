@@ -16,11 +16,16 @@ namespace Youtube_Storage_2
         public string Note { get; set; } = "";
         public bool Hidden { get; set; } = false;
 
-        List<string> history = new List<string>();
+        public List<string> history = new List<string>();
+
+        public List<string> getHistory() { return history; }
 
         public void SetLinkStr(string link)
         {
-            history.Add(LinkStr);
+            if (link != LinkStr)
+            {
+                history.Add(LinkStr);
+            }
             LinkStr = link;
         }
     }

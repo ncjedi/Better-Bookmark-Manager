@@ -26,6 +26,7 @@
                     <MenuItem x:Name="DeleteRestore" Header="Restore Item" Click="MenuItem_Click_DeleteRestore"/>
                     <MenuItem x:Name="DeletePerminate" Header="Perminately Delete Item" Click="MenuItem_Click_DeletePerminate"/>
                     <MenuItem x:Name="AddTime" Header="Add Time (Youtube)" Click="MenuItem_Click_AddTime"/>
+                    <MenuItem x:Name="ViewHistory" Header="View Link History" Click="MenuItem_Click_ViewHistory"/>
                 </ContextMenu>
             </ListBox.ContextMenu>
             <ListBox.ItemTemplate>
