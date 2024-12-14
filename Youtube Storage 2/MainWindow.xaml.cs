@@ -522,6 +522,11 @@ namespace Youtube_Storage_2
             //Disables and hides the add time button
             ContextMenuEnableDisable("addTime", false, false);
 
+            if (!Clipboard.IsEmpty())
+            {
+                ContextMenuEnableDisable("paste", true); //Enable paste button
+            }
+
             if (FolderMenuList.SelectedItem != null)
             {
                 selected = (Transfer)FolderMenuList.SelectedItem;
@@ -535,12 +540,16 @@ namespace Youtube_Storage_2
             {
                 ContextMenuEnableDisable("edit", true); //Enable edit button
                 ContextMenuEnableDisable("delete", true); //Enable delete button
+                ContextMenuEnableDisable("cut", true); //Enable cut button
+                ContextMenuEnableDisable("copy", true); //Enable copy button
             }
 
             else if (selected.Type == "L")
             {
                 ContextMenuEnableDisable("edit", true); //Enable edit button
                 ContextMenuEnableDisable("delete", true); //Enable delete button
+                ContextMenuEnableDisable("cut", true); //Enable cut button
+                ContextMenuEnableDisable("copy", true); //Enable copy button
 
                 //Enables the set link button
                 ContextMenuEnableDisable("setLink", true, true);
@@ -858,17 +867,37 @@ namespace Youtube_Storage_2
 
         private void MenuItem_Click_Cut(object sender, RoutedEventArgs e)
         {
+            Transfer selected = (Transfer)FolderMenuList.SelectedItem;
 
+            if (selected.Type == "F")
+            {
+                Clipboard.CutFolder(currentFolder.folders[int.Parse(selected.Index)], int.Parse(selected.Index), currentFolder);
+            }
+            else if (selected.Type == "L")
+            {
+                Clipboard.CutLink(currentFolder.links[int.Parse(selected.Index)], int.Parse(selected.Index), currentFolder);
+            }
         }
 
         private void MenuItem_Click_Copy(object sender, RoutedEventArgs e)
         {
+            Transfer selected = (Transfer)FolderMenuList.SelectedItem;
 
+            if (selected.Type == "F")
+            {
+                Clipboard.CopyFolder(currentFolder.folders[int.Parse(selected.Index)]);
+            }
+            else if (selected.Type == "L")
+            {
+                Clipboard.CopyLink(currentFolder.links[int.Parse(selected.Index)]);
+            }
         }
 
         private void MenuItem_Click_Paste(object sender, RoutedEventArgs e)
         {
+            Clipboard.PasteItem(currentFolder);
 
+            RefreshFolderList();
         }
     }
 }
