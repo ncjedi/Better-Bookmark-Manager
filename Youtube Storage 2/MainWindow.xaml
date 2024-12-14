@@ -18,6 +18,9 @@
                     <MenuItem x:Name="AddNewFolder" Header="Add New Folder" Click="MenuItem_Click_NewFolder"/>
                     <MenuItem x:Name="AddNewLink" Header="Add New Link" Click="MenuItem_Click_NewLink"/>
                     <MenuItem x:Name="Edit" Header="Edit Item" Click="MenuItem_Click_Edit"/>
+                    <MenuItem x:Name="Cut" Header="Cut" Click="MenuItem_Click_Cut"/>
+                    <MenuItem x:Name="Copy" Header="Copy" Click="MenuItem_Click_Copy"/>
+                    <MenuItem x:Name="Paste" Header="Paste" Click="MenuItem_Click_Paste"/>
                     <MenuItem x:Name="Delete" Header="Delete Item" Click="MenuItem_Click_Delete"/>
                     <MenuItem x:Name="SetLinkToTab" Header="Set Link To Current Tab(Chrome)" Click="MenuItem_Click_SetLink"/>
                     <MenuItem x:Name="DeleteRestore" Header="Restore Item" Click="MenuItem_Click_DeleteRestore"/>

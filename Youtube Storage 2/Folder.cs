@@ -97,12 +97,15 @@ namespace Youtube_Storage_2
             SendToAllLinks(link);
         }
 
-        public void AddLink(Link link)
+        public void AddLink(Link link, bool addToAllLinks = true)
         {
             link.Parent = this;
 
             links.Add(link);
-            SendToAllLinks(link);
+            if (addToAllLinks)
+            {
+                SendToAllLinks(link);
+            }
         }
 
         public void RemoveLink(int index)
