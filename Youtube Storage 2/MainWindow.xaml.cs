@@ -365,12 +365,17 @@ namespace Youtube_Storage_2
 
         private void DoubleClickFolderItem(object sender, MouseButtonEventArgs e)
         {
-            if(e.RightButton == MouseButtonState.Pressed)
+            Transfer selected = new Transfer();
+
+            if (e.RightButton == MouseButtonState.Pressed)
             {
                 return;
             }
 
-            Transfer selected = (Transfer)FolderMenuList.SelectedItem;
+            if (FolderMenuList.SelectedItem != null)
+            {
+                selected = (Transfer)FolderMenuList.SelectedItem;
+            }
 
             //If the parent directory is double clicked return to it
             if (selected.Type == "P")
