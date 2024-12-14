@@ -2,8 +2,6 @@ Items are listed in order of priority with the first being the highest priority.
 
 ----Items----
 
-Move folders and links
-
 Tidy up windows
 
 View link history
@@ -39,5 +37,7 @@ Ability to add time to youtube links
 		Will open new window to input a time
 
 	Checks if a time already exists and replaces it if it does
+
+Move folders and links
 
 ----Implimented----

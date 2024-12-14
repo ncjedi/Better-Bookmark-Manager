@@ -145,7 +145,7 @@ namespace Youtube_Storage_2
                 else
                 {
                     selected.Name = NameText.Text;
-                    selected.LinkStr = LinkText.Text;
+                    selected.SetLinkStr(LinkText.Text);
                     selected.Note = NoteText.Text;
                 }
 
@@ -181,7 +181,7 @@ namespace Youtube_Storage_2
             else
             {
                 selected.Name = NameText.Text;
-                selected.LinkStr = LinkText.Text;
+                selected.SetLinkStr(LinkText.Text);
                 selected.Note = NoteText.Text;
             }
 
