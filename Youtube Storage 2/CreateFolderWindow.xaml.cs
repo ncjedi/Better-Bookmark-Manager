@@ -20,6 +20,7 @@ namespace Youtube_Storage_2
     public partial class CreateFolderWindow : Window
     {
         bool edit;
+        bool nameReset = false;
         MainWindow parent = (MainWindow)Application.Current.MainWindow;
         Folder selected = new Folder();
 
@@ -42,13 +43,18 @@ namespace Youtube_Storage_2
 
         private void TextClicked(object sender, MouseButtonEventArgs e)
         {
-            if(NameText.Text == "Name" && !edit)
+            if (!nameReset)
             {
-                NameText.Text = "";
-            }
-            else if(NameText.Text == selected.Name && edit)
-            {
-                NameText.Text = "";
+                if (NameText.Text == "Name" && !edit)
+                {
+                    NameText.Text = "";
+                    nameReset = true;
+                }
+                else if (NameText.Text == selected.Name && edit)
+                {
+                    NameText.Text = "";
+                    nameReset = true;
+                }
             }
         }
 

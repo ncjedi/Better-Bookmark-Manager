@@ -4,8 +4,6 @@ Items are listed in order of priority with the first being the highest priority.
 
 Tidy up windows
 
-View link history
-
 Add customization options (change icon image, colours, etc.)
 
 ----Items----
@@ -39,5 +37,7 @@ Ability to add time to youtube links
 	Checks if a time already exists and replaces it if it does
 
 Move folders and links
+
+View link history
 
 ----Implimented----

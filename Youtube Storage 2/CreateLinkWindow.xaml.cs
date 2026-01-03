@@ -21,6 +21,10 @@ namespace Youtube_Storage_2
     {
         bool edit;
         bool noteTyped;
+        bool nameReset = false;
+        bool linkReset = false;
+        bool noteReset = false;
+
         MainWindow parent = (MainWindow)Application.Current.MainWindow;
         Link selected = new Link();
 
@@ -71,15 +75,17 @@ namespace Youtube_Storage_2
             {
                 Keyboard.Focus(LinkText);
             }
-            else
+            else if(!nameReset)
             {
                 if (NameText.Text == "Name" && !edit)
                 {
                     NameText.Text = "";
+                    nameReset = true;
                 }
                 else if (NameText.Text == selected.Name && edit)
                 {
                     NameText.Text = "";
+                    nameReset = true;
                 }
             }
         }
@@ -102,15 +108,17 @@ namespace Youtube_Storage_2
             {
                 Keyboard.Focus(NoteText);
             }
-            else
+            else if(!linkReset)
             {
                 if (LinkText.Text == "Link" && !edit)
                 {
                     LinkText.Text = "";
+                    linkReset = true;
                 }
                 else if (LinkText.Text == selected.LinkStr && edit)
                 {
                     LinkText.Text = "";
+                    linkReset = true;
                 }
             }
         }
@@ -151,16 +159,18 @@ namespace Youtube_Storage_2
 
                 this.Close();
             }
-            else
+            else if(!noteReset)
             {
                 if (NoteText.Text == "Note" && !edit)
                 {
                     noteTyped = true;
                     NoteText.Text = "";
+                    noteReset = true;
                 }
                 else if (NoteText.Text == selected.Note && edit)
                 {
                     NoteText.Text = "";
+                    noteReset = true;
                 }
             }
         }
@@ -173,6 +183,11 @@ namespace Youtube_Storage_2
         private void CreateClicked(object sender, RoutedEventArgs e)
         {
             MainWindow parent = (MainWindow)Application.Current.MainWindow;
+
+            if (!noteReset & NoteText.Text == "Note" && !edit)
+            {
+                NoteText.Text = "";
+            }
 
             if (!edit)
             {

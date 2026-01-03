@@ -2,9 +2,9 @@ Items are listed in order of priority with the first being the highest priority.
 
 ----Items----
 
-Pressing create instead of enter when making a link leaves the note as "Note" which is annoying :l
-
 ----Fixed----
 
 When adding a new link if enter is pressed without typing a note there should be no note in the link. Currently note is "note".
 If edit is pressed on a link and no changes are made the link is still added to history
+text dissapears if you're just trying to append to the end of a text box @_@ (you still have to rewrite it but atleast you CAN append in a way now)
+Pressing create instead of enter when making a link leaves the note as "Note" which is annoying :l
