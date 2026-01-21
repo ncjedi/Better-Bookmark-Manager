@@ -267,6 +267,7 @@ namespace Youtube_Storage_2
                 }
 
                 transfer.Index = i.ToString();
+                transfer.FullName = link.GetFullName();
 
                 FolderMenuList.Items.Add(transfer);
             }
