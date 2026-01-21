@@ -18,6 +18,8 @@ namespace Youtube_Storage_2
 
         public List<string> history = new List<string>();
 
+        public string alternateNames { get; set; } = "";
+
         public List<string> getHistory() { return history; }
 
         public void SetLinkStr(string link)
@@ -27,6 +29,11 @@ namespace Youtube_Storage_2
                 history.Add(LinkStr);
             }
             LinkStr = link;
+        }
+
+        public string GetFullName()
+        {
+            return Name + alternateNames;
         }
     }
 }

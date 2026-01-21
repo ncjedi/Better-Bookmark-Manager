@@ -2,6 +2,8 @@ Items are listed in order of priority with the first being the highest priority.
 
 ----Items----
 
+shortcuts to links (so you can have more than one title for a link)
+
 Tidy up windows
 
 Add customization options (change icon image, colours, etc.)

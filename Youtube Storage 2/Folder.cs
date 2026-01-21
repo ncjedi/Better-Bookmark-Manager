@@ -18,6 +18,7 @@ namespace Youtube_Storage_2
         public Folder Parent { get; set; } = null;
         public string Name { get; set; } = "";
         public bool Hidden { get; set; } = false;
+        public string alternateNames { get; set; } = "";
 
         public List<Folder> GetFolders() 
         { 
@@ -150,6 +151,11 @@ namespace Youtube_Storage_2
             }
 
             allLinks.Reverse();
+        }
+
+        public string GetFullName()
+        {
+            return Name + alternateNames;
         }
     }
 }
