@@ -188,6 +188,7 @@ namespace Youtube_Storage_2
                 transfer.Type = "P";
                 transfer.Hidden = "F";
                 transfer.Index = "0";
+                transfer.FullName = "(Back)";
 
                 FolderMenuList.Items.Add(transfer);
             }
