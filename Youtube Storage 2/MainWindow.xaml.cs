@@ -47,6 +47,7 @@ namespace Youtube_Storage_2
             public string Type { get; set; }
             public string Hidden { get; set; }
             public string Index { get; set; }
+            public string FullName { get; set; } //this is used for the search to search for the name + alternate names
         }
 
         public MainWindow()
@@ -208,6 +209,7 @@ namespace Youtube_Storage_2
                     transfer.Hidden = "F";
                 }
                 transfer.Index = i.ToString();
+                transfer.FullName = folder.GetFullName();
 
                 FolderMenuList.Items.Add(transfer);
             }
@@ -230,6 +232,7 @@ namespace Youtube_Storage_2
                 }
 
                 transfer.Index = i.ToString();
+                transfer.FullName = link.GetFullName();
 
                 FolderMenuList.Items.Add(transfer);
             }
@@ -318,7 +321,7 @@ namespace Youtube_Storage_2
 
             foreach (Transfer item in items)
             {
-                if(!item.ItemName.ToLower().Contains(search.ToLower()) || item.Type == "P")
+                if(!item.FullName.ToLower().Contains(search.ToLower()) || item.Type == "P")
                 {
                     FolderMenuList.Items.Remove(item);
                 }
@@ -494,6 +497,12 @@ namespace Youtube_Storage_2
                         ((MenuItem)FolderMenuList.ContextMenu.Items[11]).Visibility = visibility;
                         break;
                     }
+                case "alternateNames":
+                    {
+                        ((MenuItem)FolderMenuList.ContextMenu.Items[12]).IsEnabled = enableChoice;
+                        ((MenuItem)FolderMenuList.ContextMenu.Items[12]).Visibility = visibility;
+                        break;
+                    }
             }
         }
 
@@ -531,6 +540,9 @@ namespace Youtube_Storage_2
             //Disables and hides the view history button
             ContextMenuEnableDisable("viewHistory", false, false);
 
+            //Disables and hides the add alternate names button
+            ContextMenuEnableDisable("alternateNames", false, false);
+
             if (!Clipboard.IsEmpty())
             {
                 ContextMenuEnableDisable("paste", true); //Enable paste button
@@ -551,6 +563,9 @@ namespace Youtube_Storage_2
                 ContextMenuEnableDisable("delete", true); //Enable delete button
                 ContextMenuEnableDisable("cut", true); //Enable cut button
                 ContextMenuEnableDisable("copy", true); //Enable copy button
+
+                //Enables the add alternate names button
+                ContextMenuEnableDisable("alternateNames", true, true);
             }
 
             else if (selected.Type == "L")
@@ -568,6 +583,9 @@ namespace Youtube_Storage_2
 
                 //Enables the view history button
                 ContextMenuEnableDisable("viewHistory", true, true);
+
+                //Enables the add alternate names button
+                ContextMenuEnableDisable("alternateNames", true, true);
             }
 
             if(ShowDeletedCheck.IsChecked == true && selected.Type != "P")
@@ -917,6 +935,14 @@ namespace Youtube_Storage_2
         {
             LinkHistoryWindow window = new LinkHistoryWindow();
             window.ShowDialog();
+        }
+        private void MenuItem_Click_AlternateNames(object sender, RoutedEventArgs e)
+        {
+            EditAlternateNames window = new EditAlternateNames();
+            window.ShowDialog();
+
+            SaveData();
+            RefreshFolderList();
         }
     }
 }
